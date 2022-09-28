@@ -5,6 +5,9 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
   // Start is called before the first frame update
+
+  private int life = 4;
+  private bool isGettingHit = false;
   void Start()
   {
 
@@ -13,6 +16,17 @@ public class Enemy : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
+    if (life <= 0)
+    {
+      Destroy(gameObject);
+    }
+    if (isGettingHit)
+    {
+      GetComponent<SpriteRenderer>().color = Color.red;
+      life--;
+      isGettingHit = false;
+    }
+
 
   }
 
@@ -20,8 +34,26 @@ public class Enemy : MonoBehaviour
   {
     if (collision.tag == "Player")
     {
-      Debug.Log("Life " + collision.GetComponentInChildren<LifeSystem>().life);
       collision.GetComponentInChildren<LifeSystem>().TakeDamage();
     }
+    else if (collision.tag == "PlayerAttack")
+    {
+      Debug.Log("Enemy hit " + life);
+      isGettingHit = true;
+    }
+
   }
+
+  private void OnTriggerExit2D(Collider2D other)
+  {
+    if (other.tag == "PlayerAttack")
+    {
+      isGettingHit = false;
+      GetComponent<SpriteRenderer>().color = Color.white;
+    }
+  }
+
+
+
+
 }

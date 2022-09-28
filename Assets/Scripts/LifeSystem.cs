@@ -10,10 +10,6 @@ public class LifeSystem : MonoBehaviour
   // Update is called once per frame
   void Update()
   {
-    if (Input.GetKeyDown(KeyCode.E))
-    {
-      TakeDamage();
-    }
   }
 
   public void TakeDamage()
@@ -22,10 +18,11 @@ public class LifeSystem : MonoBehaviour
     if (lifeText != null)
     {
       lifeText.text = life.ToString();
+      GetComponentInParent<PlayerMovement>().AnimateDamage();
     }
     if (life <= 0)
     {
-      Destroy(gameObject);
+      GetComponentInParent<PlayerMovement>().AnimateDeath();
     }
   }
 }
